@@ -58,8 +58,8 @@ node_templates:
     relationships:
       - target: Port_VM1
         type: cloudify.openstack.server_connected_to_port
-      - target: keypair
-        type: cloudify.openstack.server_connected_to_keypair
+#      - target: keypair
+#        type: cloudify.openstack.server_connected_to_keypair
 
   VM2:
     type: cloudify.openstack.nodes.Server
@@ -77,8 +77,8 @@ node_templates:
     relationships:
       - target: Port_VM2
         type: cloudify.openstack.server_connected_to_port
-      - target: keypair
-        type: cloudify.openstack.server_connected_to_keypair
+#      - target: keypair
+#        type: cloudify.openstack.server_connected_to_keypair
 
   Net1:
     type: cloudify.openstack.nodes.Network
@@ -119,10 +119,10 @@ node_templates:
           target: Net1
 
 
-  keypair:
-    type: cloudify.openstack.nodes.KeyPair
-    properties:
-      resource_id: { get_input: key_name }
-      private_key_path: '~/.ssh/cloudify.pem'
-      create_if_missing: true
-      use_external_resource: true
+#  keypair:
+#    type: cloudify.openstack.nodes.KeyPair
+#    properties:
+#      resource_id: { get_input: key_name }
+#      private_key_path: '~/.ssh/cloudify.pem'
+#      create_if_missing: true
+#      use_external_resource: true
