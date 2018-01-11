@@ -81,7 +81,7 @@ node_templates:
     properties:
       resource_id: 'febc4799-1907-455d-b040-4b372e65b913'
       use_external_resource: true
-
+      openstack_config: *openstack_config
 
   Port_VM1:
     type: cloudify.openstack.nodes.Port
