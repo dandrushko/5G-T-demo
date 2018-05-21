@@ -1,0 +1,28 @@
+inputs:
+  openstack_auth_url:
+    type: string
+    default: 'http://192.168.122.109/identity/v3'
+
+  openstack_username:
+    type: string
+    default: 'admin'
+
+  openstack_password:
+    type: string
+    default: 'secret'
+
+  openstack_tenant_name:
+    type: string
+    default: 'admin'
+
+  openstack_region:
+    type: string
+    default: 'RegionOne'
+
+  image:
+    type: string
+    default: 'cirros-0.3.4-x86_64-uec'
+
+  flavor:
+    type: string
+    default: 'm1.nano'

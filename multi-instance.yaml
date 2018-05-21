@@ -1,0 +1,45 @@
+tosca_definitions_version: cloudify_dsl_1_3
+
+imports:
+    - http://www.getcloudify.org/spec/cloudify/4.3/types.yaml
+    - http://www.getcloudify.org/spec/openstack-plugin/2.7.3/plugin.yaml
+    - deployment-parameters2.yaml
+
+dsl_definitions:
+
+  openstack_config: &openstack_config
+    username: { get_input: openstack_username}
+    password: { get_input: openstack_password}
+    tenant_name: { get_input: openstack_tenant_name}
+    auth_url: { get_input: openstack_auth_url}
+    region: { get_input: openstack_region}
+
+
+node_templates:
+  vm:
+    type: cloudify.openstack.nodes.Server
+    properties:
+      openstack_config: *openstack_config
+      image: { get_input: image}
+      flavor: { get_input: flavor}
+      agent_config:
+        install_method: none
+    relationships:
+      - type: cloudify.openstack.server_connected_to_port
+        target: private_port
+
+  private_port:
+    type: cloudify.openstack.nodes.Port
+    properties:
+      openstack_config: *openstack_config
+      create_if_missing: true
+    relationships:
+      - type: cloudify.relationships.contained_in
+        target: private_network
+
+  private_network:
+    type: cloudify.openstack.nodes.Network
+    properties:
+      openstack_config: *openstack_config
+      use_external_resource: true
+      resource_id: 'private'
