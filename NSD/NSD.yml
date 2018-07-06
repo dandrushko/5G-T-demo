@@ -1,0 +1,85 @@
+tosca_definitions_version: cloudify_dsl_1_3
+
+
+imports:
+    # Root node types to be imported. These root node types specify
+    # basic data types to be used as a parent classes
+    - http://www.getcloudify.org/spec/cloudify/4.3/types.yaml
+
+dsl_definitions:
+    # Metadata from nsd might be stored in the custom data type
+    nsd_metadata: &nsd_metadata
+      "nsdIdentifier": "vCDN_v02",
+	  "designer": "Nextworks",
+	  "version": "0.2",
+	  "nsdName": "vCDN_ATOS_TIMEO",
+	  "nsdInvariantId": "vCDN_ATOS_TIMEO_v02",
+
+node_types:
+  cloudify.nodes.5gt.vnf:
+    derived_from: cloudify.nodes.Root
+    properties:
+      metadata:
+        vnfdId: "spr1",
+	    vnfProvider: "ATOS",
+	    vnfProductName: "CDN origin server",
+	    vnfSoftwareVersion: "0.1",
+	    vnfdVersion: "0.2",
+	    vnfProductInfoName: "vCDN origin server",
+	    vnfProductInfoDescription: "vCDN Origin Server"
+	  vdu:
+	    # VDU specific data TBD which is really required
+
+  cloudify.nodes.5gt.virtual_link:
+    derived_from: cloudify.nodes.Root
+    properties:
+      metadata:
+        virtualLinkDescId: "VideoDistribution",
+		virtualLinkDescProvider: "NXW",
+		virtuaLinkDescVersion: "0.1"
+	  connectivityType:
+		layerProtocol: "IPV4"
+	  virtualLinkDf:
+	    flavourId: "df_VideoDistribution",
+	    qos:
+	      latency: 0,
+		  packetDelayVariation: 0,
+		  packetLossRatio: 0,
+		  priority: 0
+
+  cloudify.nodes.5gt.security:
+    derived_from: cloudify.nodes.Root
+    properties:
+	  signature: "vCDN_NSD_SIGNATURE",
+	  algorithm: "vCDN_NSD_ALGORITHM",
+	  certificate: "vCDN_NSD_CERTIFICATE"
+
+
+node_templates:
+
+  webserver:
+    type: cloudify.nodes.5gt.vnf
+    properties:
+      #specific to this node propetries are here or overrided settings
+    relationships:
+     - type: cloudify.relationships.depends_on
+       target: "spr21"
+     - type: cloudify.relationships.connected_to
+       target: VideoDistribution
+
+  spr21:
+    type: cloudify.nodes.5gt.vnf
+    properties:
+      #specific to this node propetries are here or overrided settings
+    relationships:
+     - type: cloudify.relationships.connected_to
+       target: VideoDistribution
+     - type: cloudify.relationships.connected_to
+       target: VideoDistribution
+
+
+  VideoDistribution:
+    type: cloudify.nodes.5gt.virtual_link
+    properties:
+      #specific to this node Virt Link propetries are here or overrided settings
+
